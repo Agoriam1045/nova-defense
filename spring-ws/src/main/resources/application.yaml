@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: spring-ws
+  devtools:
+    add-properties: false
+
+server:
+  port: 1045
