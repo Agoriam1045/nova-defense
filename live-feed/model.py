@@ -5,7 +5,7 @@ import base64
 import zlib
 
 cap = cv2.VideoCapture(0)
-ws = create_connection("ws://127.0.0.1:1045/app")
+ws = create_connection("ws://192.168.0.194:1045/app")
 
 detector = PoseDetector()
 
@@ -27,7 +27,7 @@ while cap.isOpened():
     try:
         ws.send(zlib.compress(jpg_text))
     except Exception as error:
-        ws = create_connection("ws://127.0.0.1:1045/app")
+        ws = create_connection("ws://192.168.0.194:1045/app")
         print(error)
 
     cv2.imshow("Image", cv2.resize(downsized_img, (1280, 720)))

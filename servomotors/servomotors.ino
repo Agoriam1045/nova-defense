@@ -13,10 +13,10 @@ int servo3Pin = 11;
 // Variables to store the current angle of servos
 int angle1 = 90; // initial angle for servo1
 int angle2 = 90; // initial angle for servo2
-int angle3 = 90; // initial angle for servo3
+int angle3 = 30; // initial angle for servo3
 
 // Define the increment for changing the angle
-int angleIncrement = 5;
+// int angleIncrement = 10;
 
 // Joystick pins
 const int VRX = A0;
@@ -80,16 +80,10 @@ void loop() {
   // Check joystick button press
   if (digitalRead(SW) == LOW && !buttonPressed) {
     buttonPressed = true;
-    // Rotate servo3 clockwise then return to original position
-    for (int i = 0; i <= 90; i += angleIncrement) {
-      servo3.write(i);
-      delay(50);
-    }
-    delay(1000); // Delay after reaching the maximum angle
-    for (int i = 90; i <=180 ; i += angleIncrement) {
-      servo3.write(i);
-      delay(50);
-    }
+    servo3.write(angle3);
+    delay(1000);
+    servo3.write(180);
+    delay(1000);
     Serial.println("Pew! Pew! Pew!");
   } else if (digitalRead(SW) == HIGH) {
     buttonPressed = false;
