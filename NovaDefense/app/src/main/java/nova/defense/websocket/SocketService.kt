@@ -13,7 +13,7 @@ interface SocketService {
     suspend fun closeSession()
 
     companion object {
-        const val BASE_URL = "ws://192.168.0.140:1045"
+        const val BASE_URL = "ws://192.168.43.168:1045"
     }
 
     sealed class Endpoints(val url: String) {
