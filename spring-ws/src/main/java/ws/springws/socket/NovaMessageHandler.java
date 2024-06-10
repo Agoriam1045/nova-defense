@@ -48,6 +48,12 @@ public class NovaMessageHandler extends BinaryWebSocketHandler {
     @Override
     protected void handleBinaryMessage(@NonNull WebSocketSession session, @NonNull BinaryMessage message) throws IOException {
         log.info("Received frame");
-        session.sendMessage(new TextMessage("Frame received"));
+        sessions.forEach(s -> {
+            try {
+                s.sendMessage(message);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 }

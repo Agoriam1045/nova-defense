@@ -8,7 +8,7 @@ interface SocketService {
 
     suspend fun sendMessage(message: String)
 
-    fun observeMessages(): Flow<String>
+    fun observeMessages(): Flow<ByteArray>
 
     suspend fun closeSession()
 
@@ -17,6 +17,6 @@ interface SocketService {
     }
 
     sealed class Endpoints(val url: String) {
-        data object ChatSocket: Endpoints("$BASE_URL/nova")
+        data object ChatSocket: Endpoints("$BASE_URL/app")
     }
 }

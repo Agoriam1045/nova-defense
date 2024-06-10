@@ -12,14 +12,18 @@ class WebSocketService(
     private val client: HttpClient
 ): SocketService {
 
-    private var socket: WebSocketSession? = null
+    private var controlSocket: WebSocketSession? = null
+    private var imageSocket: WebSocketSession? = null
 
     override suspend fun initSession(): Resource<Unit> {
         return try {
-            socket = client.webSocketSession {
-                url(SocketService.Endpoints.ChatSocket.url)
+            controlSocket = client.webSocketSession {
+                url("${SocketService.BASE_URL}/app")
             }
-            if(socket?.isActive == true) {
+            imageSocket = client.webSocketSession {
+                url("${SocketService.BASE_URL}/nova")
+            }
+            if(controlSocket?.isActive == true) {
                 Resource.Success(Unit)
             } else Resource.Error("Couldn't establish a connection.")
         } catch(e: Exception) {
@@ -30,20 +34,20 @@ class WebSocketService(
 
     override suspend fun sendMessage(message: String) {
         try {
-            socket?.send(Frame.Text(message))
+            controlSocket?.send(Frame.Text(message))
             Log.d("WebSocketService", message)
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    override fun observeMessages(): Flow<String> {
+    override fun observeMessages(): Flow<ByteArray> {
         return try {
-            socket?.incoming
+            imageSocket?.incoming
                 ?.receiveAsFlow()
-                ?.filter { it is Frame.Text }
+                ?.filter { it is Frame.Binary }
                 ?.map {
-                    (it as? Frame.Text)?.readText() ?: ""
+                    (it as? Frame.Binary)?.readBytes() ?: ByteArray(0)
                 } ?: flow {  }
         } catch(e: Exception) {
             e.localizedMessage?.let { Log.e("WebSocketService", it) }
@@ -52,6 +56,7 @@ class WebSocketService(
     }
 
     override suspend fun closeSession() {
-        socket?.close()
+        controlSocket?.close()
+        imageSocket?.close()
     }
 }

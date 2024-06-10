@@ -29,13 +29,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import nova.defense.joystick.JoyStick
 import nova.defense.R
-import nova.defense.camera.CameraPreview
 import nova.defense.controls.ControlViewModel
 import nova.defense.navigation.BottomNavBar
 import nova.defense.navigation.NavBarItem
 import nova.defense.navigation.Screens
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
+import nova.defense.camera.WebSocketImageDisplay
 import nova.defense.websocket.WebSocketClient
 
 @Composable
@@ -43,13 +43,6 @@ fun ControlScreen(
     navController: NavHostController,
     viewModel: ControlViewModel = viewModel()
 ) {
-    val applicationContext = LocalContext.current.applicationContext
-    val camController = remember {
-        LifecycleCameraController(applicationContext).apply {
-
-        }
-    }
-
     LaunchedEffect(true) {
         WebSocketClient.service.initSession();
     }
@@ -57,10 +50,11 @@ fun ControlScreen(
     val lifecycleOwner = LocalLifecycleOwner.current
 
     Box(modifier = Modifier.fillMaxSize()    ) {
-        CameraPreview(
-            controller = camController,
-            modifier = Modifier.fillMaxSize(),
-        )
+        WebSocketImageDisplay()
+    }
+
+    fun convertJoystickValue(value: Float): Float {
+        return ((value + 1) / 2) * 180
     }
 
     Column(
@@ -79,7 +73,7 @@ fun ControlScreen(
                 dotSize = 30.dp
             ){ x: Float, y: Float ->
                 lifecycleOwner.lifecycleScope.launch {
-                    viewModel.sendJoystickPosition(x, y);
+                    viewModel.sendJoystickPosition(convertJoystickValue(x), convertJoystickValue(y));
                 }
             }
             ElevatedButton(

@@ -5,7 +5,7 @@ import nova.defense.websocket.WebSocketClient
 
 class ControlViewModel : ViewModel() {
     suspend fun sendJoystickPosition(x: Float, y: Float) {
-        WebSocketClient.service.sendMessage("{\"x\" : \"${x}\", \"y\" : \"${y}\"}")
+        WebSocketClient.service.sendMessage("{\"x\" : ${x}, \"y\" : ${y}}")
     }
 
     suspend fun sendButtonClicked() {
