@@ -1,5 +1,0 @@
-opencv-python
-cvzone
-mediapipe
-websocket-client
-rel
