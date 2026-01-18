@@ -52,23 +52,6 @@ def servo_Shoot():
     time.sleep(1)
     trigger_servo.goto(round(servo_Map(180, 0, 180, 0, 1024)))
 
-
-# added by Paul
-def random_angle():
-    try:
-        while True:
-            rand = random.randint(0, 180)
-            servo_Angle_Yaw(rand)
-            rand = random.randint(60, 180)
-            servo_Angle_Pitch(rand)
-
-            print(f"Random angle: {rand}")  # Print the random angle for debugging
-            time.sleep(1)
-    except KeyboardInterrupt:
-        print("Exiting...")
-        servo_Angle(90)
-
-
 # WiFi credentials
 ssid = 'Tenda'  # 'DIGI_ffa8e4'
 password = 'walkback669'

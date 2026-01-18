@@ -35,6 +35,7 @@ import nova.defense.navigation.NavBarItem
 import nova.defense.navigation.Screens
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
+import nova.defense.camera.CameraPreview
 import nova.defense.camera.WebSocketImageDisplay
 import nova.defense.websocket.WebSocketClient
 
@@ -49,8 +50,8 @@ fun ControlScreen(
 
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    Box(modifier = Modifier.fillMaxSize()    ) {
-        WebSocketImageDisplay()
+    Box(modifier = Modifier.fillMaxSize()) {
+            WebSocketImageDisplay()
     }
 
     fun convertJoystickValue(value: Float): Float {
